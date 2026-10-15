@@ -26,6 +26,7 @@ public partial class App : Application
             await _host.StartAsync();
             await ELibraryComposition.InitializeDatabaseAsync(_host);
             await _host.Services.GetRequiredService<IAuthService>().EnsureSeedAdminAsync();
+            await RunScheduledBackupAsync();
         }
         catch (Exception ex)
         {
@@ -75,6 +76,20 @@ public partial class App : Application
         }
 
         base.OnExit(e);
+    }
+
+    private async Task RunScheduledBackupAsync()
+    {
+        try
+        {
+            var scheduler = _host!.Services.GetRequiredService<IBackupScheduler>();
+            await scheduler.RunIfDueAsync();
+        }
+        catch (Exception ex)
+        {
+            // Best effort: a failed scheduled backup must not prevent the app from starting.
+            System.Diagnostics.Debug.WriteLine($"Scheduled backup failed: {ex.Message}");
+        }
     }
 
     private static void ConfigureShell(AppShellOptions shell, IServiceCollection services)

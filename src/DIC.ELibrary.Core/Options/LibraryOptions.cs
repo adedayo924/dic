@@ -23,12 +23,14 @@ public class LibraryOptions
     public string PackagesFolderName { get; set; } = "packages";
     public string LogsFolderName { get; set; } = "logs";
     public string CoversFolderName { get; set; } = "covers";
+    public string BackupsFolderName { get; set; } = "backups";
 
     public string DatabasePath => Path.Combine(ResolvedDataDirectory, DatabaseFileName);
     public string BooksPath => Path.Combine(ResolvedDataDirectory, BooksFolderName);
     public string PackagesPath => Path.Combine(ResolvedDataDirectory, PackagesFolderName);
     public string LogsPath => Path.Combine(ResolvedDataDirectory, LogsFolderName);
     public string CoversPath => Path.Combine(ResolvedDataDirectory, CoversFolderName);
+    public string BackupsPath => Path.Combine(ResolvedDataDirectory, BackupsFolderName);
 
     public string ResolvedDataDirectory =>
         string.IsNullOrWhiteSpace(DataDirectory)

@@ -75,9 +75,51 @@
                     <StackPanel Orientation="Horizontal">
                         <Button Style="{StaticResource SecondaryButton}" Margin="0,0,8,0" Content="Backup database…"
                                 Command="{Binding BackupCommand}" />
+                        <Button Style="{StaticResource GhostButton}" Margin="0,0,8,0" Content="Backup now"
+                                Command="{Binding BackupNowCommand}" />
+                        <Button Style="{StaticResource GhostButton}" Margin="0,0,8,0" Content="Verify backup…"
+                                Command="{Binding VerifyBackupCommand}" />
                         <Button Style="{StaticResource GhostButton}" Content="Restore database…"
                                 Command="{Binding RestoreCommand}" />
                     </StackPanel>
+
+                    <CheckBox Margin="0,16,0,0" Content="Enable scheduled backups"
+                              IsChecked="{Binding BackupEnabled, Mode=TwoWay}" />
+
+                    <Grid Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="90" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="90" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Every (days)" Style="{StaticResource BodyText}" VerticalAlignment="Center" />
+                        <TextBox Grid.Column="1" Margin="8,0,0,0" Style="{StaticResource InputTextBox}"
+                                 Text="{Binding BackupIntervalDays, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBlock Grid.Column="2" Margin="16,0,0,0" Text="Keep" Style="{StaticResource BodyText}" VerticalAlignment="Center" />
+                        <TextBox Grid.Column="3" Margin="8,0,0,0" Style="{StaticResource InputTextBox}"
+                                 Text="{Binding BackupKeep, UpdateSourceTrigger=PropertyChanged}" />
+                    </Grid>
+
+                    <TextBlock Margin="0,10,0,0" Text="Backup folder" Style="{StaticResource CaptionText}" />
+                    <Grid Margin="0,4,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" Style="{StaticResource InputTextBox}"
+                                 Text="{Binding BackupFolder, UpdateSourceTrigger=PropertyChanged}" />
+                        <Button Grid.Column="1" Margin="8,0,0,0" Style="{StaticResource GhostButton}"
+                                Content="Browse…" Command="{Binding BrowseBackupFolderCommand}" />
+                        <Button Grid.Column="2" Margin="8,0,0,0" Style="{StaticResource PrimaryButton}"
+                                Content="Save schedule" Command="{Binding SaveBackupScheduleCommand}" />
+                    </Grid>
+
+                    <TextBlock Margin="0,10,0,0" Text="{Binding LastBackupText, Mode=OneWay}"
+                               Style="{StaticResource CaptionText}" />
+
                     <TextBlock Margin="0,12,0,0" Text="{Binding StatusMessage}" Style="{StaticResource BodyText}"
                                TextWrapping="Wrap" Foreground="{StaticResource IndigoBrush}" />
                 </StackPanel>

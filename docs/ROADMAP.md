@@ -28,10 +28,10 @@ Status legend: ✅ done · 🚧 in progress · ⬜ planned
 - ✅ Shared WPF library: MVVM infrastructure, dialogs, theming, converters.
 - ✅ Student app: Dashboard, Catalog, Book detail, Reader, My Library, Import, Settings, Login.
 - ✅ Admin app: Dashboard, Books, Ingest, Packages, Users, Loans, Reports, Audit, Settings, editors.
-- ✅ Composition root shared by both heads; all 16 views verified to instantiate at runtime.
+- ✅ Composition root shared by both heads; all 17 views verified to instantiate at runtime.
 
 ## Phase 5 — Quality ✅
-- ✅ Test suites for Core, Security, Data, Package and Pdf layers (70 tests passing).
+- ✅ Test suites for Core, Security, Data, Package and Pdf layers (105 tests passing).
 - ✅ Full solution builds with zero warnings/errors (Debug & Release).
 - ✅ Smoke tests: both app heads launch, migrate and seed against a shared data directory.
 
@@ -46,5 +46,5 @@ Status legend: ✅ done · 🚧 in progress · ⬜ planned
 - ✅ Reader: search-in-document (find matches across pages, navigate to hits, snippets).
 - ⬜ Reader enhancements: textured bookmarks panel, adjustable reading themes.
 - ⬜ PDF export for circulation and audit reports (CSV delivered).
-- ⬜ Backup/restore scheduling and integrity verification surfaced in Admin settings.
+- ✅ Backup/restore scheduling and integrity verification surfaced in Admin settings (`IBackupScheduler`, PRAGMA integrity check, retention pruning).
 - ⬜ Signed catalog trust management UI (import/rotate verification public keys).

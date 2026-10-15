@@ -87,6 +87,7 @@ Notes:
   books\<bookIdN>\      # original PDF + content.txt (extracted/OCR text)
   covers\               # generated cover images
   packages\             # built .dicpkg / .dicl artifacts
+  backups\              # automatic scheduled database backups (library-YYYYMMDD-HHmmss.db)
   logs\                 # rolling Serilog logs (elibrary-YYYYMMDD.log)
   keys\                 # DPAPI key material (see below)
 ```
@@ -113,6 +114,18 @@ Paths stored in the database are relative to the data directory and resolved wit
   Serilog and shows an error dialog instead of closing silently.
 
 Seed administrator on first run: username `admin`, password `Admin@123` (change immediately).
+
+## Backup & maintenance
+
+- `IBackupService.BackupAsync` performs an online SQLite backup to a target file (destination
+  connections are unpooled so backup files are never left locked); `RestoreAsync` replaces the live
+  database; `VerifyAsync` opens a backup read-only, runs `PRAGMA integrity_check` and counts
+  `Books`/`Users`; `ListBackupsAsync` enumerates `*.db` files newest-first.
+- `IBackupScheduler` persists the automatic-backup policy in application settings
+  (`Backup.Enabled`, `Backup.IntervalDays`, `Backup.Keep`, `Backup.Folder`, `Backup.LastRunAt`).
+  At startup `RunIfDueAsync` writes `library-YYYYMMDD-HHmmss.db` into the backup folder when due and
+  prunes the folder down to `Keep` files. The schedule, "Backup now" and "Verify backup…" actions are
+  surfaced in Admin → Settings.
 
 ## Packaging (`.dicpkg` / `.dicl`)
 

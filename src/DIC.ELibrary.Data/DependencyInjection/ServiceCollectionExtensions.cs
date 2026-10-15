@@ -33,6 +33,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IReaderService, ReaderService>();
         services.AddSingleton<IStatsService, StatsService>();
         services.AddSingleton<IBackupService, BackupService>();
+        services.AddSingleton<IBackupScheduler, BackupScheduler>();
         services.AddSingleton<IReportService, ReportService>();
 
         return services;

@@ -42,6 +42,31 @@ public interface IBackupService
 {
     Task<OperationResult<string>> BackupAsync(string targetFile, CancellationToken cancellationToken = default);
     Task<OperationResult> RestoreAsync(string sourceFile, CancellationToken cancellationToken = default);
+
+    /// <summary>Verifies a backup file's SQLite integrity and expected schema.</summary>
+    Task<OperationResult<BackupVerificationResult>> VerifyAsync(string file, CancellationToken cancellationToken = default);
+
+    /// <summary>Lists backup `.db` files in a folder, most recent first.</summary>
+    Task<IReadOnlyList<BackupFileInfo>> ListBackupsAsync(string folder, CancellationToken cancellationToken = default);
+}
+
+public interface IBackupScheduler
+{
+    /// <summary>The default folder used when no custom folder is configured.</summary>
+    string DefaultFolder { get; }
+
+    Task<BackupSchedule> GetScheduleAsync(CancellationToken cancellationToken = default);
+
+    Task SaveScheduleAsync(BackupSchedule schedule, CancellationToken cancellationToken = default);
+
+    /// <summary>Determines whether a scheduled backup is due at the supplied instant.</summary>
+    bool IsDue(BackupSchedule schedule, DateTimeOffset now);
+
+    /// <summary>Creates a backup if the schedule is due; returns the path, or <c>null</c> when not due.</summary>
+    Task<OperationResult<string?>> RunIfDueAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>Creates a backup immediately and prunes old backups.</summary>
+    Task<OperationResult<string>> RunNowAsync(CancellationToken cancellationToken = default);
 }
 
 public interface IReportService

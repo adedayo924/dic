@@ -24,7 +24,7 @@ public sealed class TestLibraryHost : IAsyncDisposable
         Services = services;
     }
 
-    public static async Task<TestLibraryHost> CreateAsync(bool initialize = true)
+    public static async Task<TestLibraryHost> CreateAsync(bool initialize = true, IClock? clock = null)
     {
         var directory = Path.Combine(Path.GetTempPath(), "dic-eltests", Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(directory);
@@ -32,6 +32,10 @@ public sealed class TestLibraryHost : IAsyncDisposable
         var services = new ServiceCollection();
         services.AddLogging(builder => builder.SetMinimumLevel(LogLevel.Warning));
         services.AddELibraryCore();
+        if (clock is not null)
+        {
+            services.AddSingleton(clock);
+        }
         services.Configure<LibraryOptions>(options =>
         {
             options.DataDirectory = directory;
