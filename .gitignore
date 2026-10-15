@@ -4,6 +4,9 @@
 [Ll]og/
 [Ll]ogs/
 
+## Installer artifacts (large binaries + test signing certificate)
+/dist/
+
 ## Visual Studio / Rider
 .vs/
 .idea/
