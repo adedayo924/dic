@@ -176,4 +176,7 @@ internal sealed class StubPdfService : IPdfService
 
     public Task<string> ExtractPageTextAsync(string filePath, int pageNumber, CancellationToken cancellationToken = default) =>
         Task.FromResult(string.Empty);
+
+    public Task<IReadOnlyList<PdfTextMatch>> SearchAsync(string filePath, string term, int maxMatches = 200, CancellationToken cancellationToken = default) =>
+        Task.FromResult<IReadOnlyList<PdfTextMatch>>(Array.Empty<PdfTextMatch>());
 }

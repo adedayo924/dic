@@ -134,7 +134,9 @@ Behaviour is governed by `PackageOptions` (`Encrypt`, `Sign`, `Extension = .dicp
 ## Document pipeline
 
 - **PdfPig** (`PdfPigDocumentService`) extracts metadata and embedded text — used for digitally-born
-  PDFs and per-page reading.
+  PDFs and per-page reading. It also powers reader search: `IPdfService.SearchAsync` scans page text
+  case-insensitively and returns one `PdfTextMatch` (page number + snippet + occurrence count) per
+  matching page, which the reader uses to jump between hits.
 - **OCR** (`DIC.ELibrary.Ocr`) uses Windows.Media.Ocr for scanned books and Windows.Data.Pdf to
   render pages to images. `OcrOptions` controls language, page limits and the "skip if text already
   present" heuristic. Extracted text is written back via `IBookService.ApplyOcrTextAsync`; covers via
@@ -175,3 +177,30 @@ dotnet build DIC.ELibrary.sln -c Release
 dotnet run --project src/DIC.ELibrary.Admin
 dotnet run --project src/DIC.ELibrary.App
 ```
+
+## Deployment
+
+Publish a self-contained, single-file build (no .NET runtime required on the target machine):
+
+```powershell
+dotnet publish src/DIC.ELibrary.App/DIC.ELibrary.App.csproj -c Release -p:PublishProfile=win-x64
+```
+
+The profile (`src/DIC.ELibrary.App/Properties/PublishProfiles/win-x64.pubxml`) targets `win-x64`,
+self-contained, single-file with compression, and emits only `DIC.ELibrary.App.exe` plus
+`appsettings.json` under `bin/Release/net8.0-windows10.0.19041.0/publish/win-x64/`. CI publishes the
+same profile and uploads it as the `DIC.ELibrary-win-x64` build artifact.
+
+### Per-machine configuration
+
+Configuration precedence is: command line > environment variables > machine file > `appsettings.json`.
+An administrator can pin shared settings (for example a shared catalog directory) for every user on
+the machine by creating `%ProgramData%\DIC\ELibrary\appsettings.json`:
+
+```json
+{ "Library": { "DataDirectory": "C:\\DIC\\ELibrary-Data" } }
+```
+
+Environment variables (`Library__DataDirectory`) and command-line arguments
+(`--Library:DataDirectory=...`) also override the default, which remains
+`%LOCALAPPDATA%\DIC\ELibrary` per user.

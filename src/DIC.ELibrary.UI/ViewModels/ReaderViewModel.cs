@@ -19,6 +19,7 @@ public partial class ReaderViewModel : ViewModelBase
     private readonly IBookService _books;
     private readonly IReaderService _reader;
     private readonly IPdfRenderer _renderer;
+    private readonly IPdfService _pdf;
     private readonly ICurrentUser _currentUser;
     private readonly IDialogService _dialogs;
     private readonly INavigationService _navigation;
@@ -31,6 +32,7 @@ public partial class ReaderViewModel : ViewModelBase
         IBookService books,
         IReaderService reader,
         IPdfRenderer renderer,
+        IPdfService pdf,
         ICurrentUser currentUser,
         IDialogService dialogs,
         INavigationService navigation,
@@ -39,6 +41,7 @@ public partial class ReaderViewModel : ViewModelBase
         _books = books;
         _reader = reader;
         _renderer = renderer;
+        _pdf = pdf;
         _currentUser = currentUser;
         _dialogs = dialogs;
         _navigation = navigation;
@@ -73,11 +76,33 @@ public partial class ReaderViewModel : ViewModelBase
     [ObservableProperty]
     private bool areBookmarksVisible = true;
 
-    public string BookmarksToggleLabel => AreBookmarksVisible ? "Hide bookmarks" : "Show bookmarks";
+    public string BookmarksToggleLabel => AreBookmarksVisible ? "Hide panel" : "Show panel";
 
     partial void OnAreBookmarksVisibleChanged(bool value) => OnPropertyChanged(nameof(BookmarksToggleLabel));
 
     public ObservableCollection<BookmarkSummary> Bookmarks { get; } = new();
+
+    [ObservableProperty]
+    private string searchTerm = string.Empty;
+
+    [ObservableProperty]
+    private string? searchSummary;
+
+    [ObservableProperty]
+    private bool isSearching;
+
+    [ObservableProperty]
+    private PdfTextMatch? selectedSearchResult;
+
+    public ObservableCollection<PdfTextMatch> SearchResults { get; } = new();
+
+    partial void OnSelectedSearchResultChanged(PdfTextMatch? value)
+    {
+        if (value is not null && value.PageNumber >= 1 && value.PageNumber <= PageCount)
+        {
+            CurrentPage = value.PageNumber;
+        }
+    }
 
     public double ZoomPercent => Math.Round(Zoom * 100);
 
@@ -256,6 +281,74 @@ public partial class ReaderViewModel : ViewModelBase
         }
         await _reader.ToggleFavoriteAsync(userId, _bookId);
         IsFavorite = !IsFavorite;
+    }
+
+    [RelayCommand]
+    private async Task SearchAsync()
+    {
+        if (Book is null)
+        {
+            return;
+        }
+
+        var term = SearchTerm?.Trim();
+        if (string.IsNullOrEmpty(term))
+        {
+            SearchResults.Clear();
+            SearchSummary = null;
+            return;
+        }
+
+        var path = _library.ToAbsolute(Book.FilePath);
+        if (!File.Exists(path))
+        {
+            _dialogs.ShowError("The book file is missing from the library store.");
+            return;
+        }
+
+        IsSearching = true;
+        try
+        {
+            var matches = await _pdf.SearchAsync(path, term);
+            SearchResults.Clear();
+            foreach (var match in matches)
+            {
+                SearchResults.Add(match);
+            }
+
+            SearchSummary = SearchResults.Count switch
+            {
+                0 => $"No matches for '{term}'.",
+                1 => $"1 page matches '{term}'.",
+                _ => $"{SearchResults.Count} pages match '{term}'."
+            };
+
+            if (SearchResults.Count > 0)
+            {
+                SelectedSearchResult = SearchResults[0];
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // Navigation away cancels the search; no action required.
+        }
+        catch (Exception ex)
+        {
+            _dialogs.ShowError(ex.Message);
+        }
+        finally
+        {
+            IsSearching = false;
+        }
+    }
+
+    [RelayCommand]
+    private void ClearSearch()
+    {
+        SearchTerm = string.Empty;
+        SearchResults.Clear();
+        SearchSummary = null;
+        SelectedSearchResult = null;
     }
 
     [RelayCommand]

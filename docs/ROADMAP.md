@@ -39,10 +39,12 @@ Status legend: ✅ done · 🚧 in progress · ⬜ planned
 - ✅ Dark mode / accessibility pass (contrast, keyboard navigation, screen-reader labels, high-DPI).
 - ✅ Continuous integration: GitHub Actions building and testing on `windows-latest`.
 - ✅ Reporting: CSV export of circulation (loans) and audit reports, plus a statistics report (`IReportService`).
-- ⬜ Installer / distribution packaging (single-file or MSIX) with per-machine data directory option.
+- ✅ Distribution packaging: self-contained single-file `win-x64` publish profile + CI artifact; per-machine data directory via `%ProgramData%\DIC\ELibrary\appsettings.json`.
+- ⬜ MSIX installer with a signing certificate (single-file `.exe` distribution delivered).
 - ⬜ Multi-branch catalog sync over `.dicl` import/merge (conflict resolution, incremental updates).
 - ⬜ Localisation infrastructure (resource dictionaries) — currently English-only.
-- ⬜ Reader enhancements: search-in-document, textured bookmarks panel, adjustable reading themes.
+- ✅ Reader: search-in-document (find matches across pages, navigate to hits, snippets).
+- ⬜ Reader enhancements: textured bookmarks panel, adjustable reading themes.
 - ⬜ PDF export for circulation and audit reports (CSV delivered).
 - ⬜ Backup/restore scheduling and integrity verification surfaced in Admin settings.
 - ⬜ Signed catalog trust management UI (import/rotate verification public keys).

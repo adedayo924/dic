@@ -37,3 +37,27 @@ jobs:
         name: test-results
         path: '**/TestResults/*.trx'
         if-no-files-found: ignore
+
+  package:
+    runs-on: windows-latest
+    needs: build-test
+    timeout-minutes: 30
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Publish (win-x64, self-contained single-file)
+      run: dotnet publish src/DIC.ELibrary.App/DIC.ELibrary.App.csproj -c Release -p:PublishProfile=win-x64
+
+    - name: Upload application artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: DIC.ELibrary-win-x64
+        path: src/DIC.ELibrary.App/bin/Release/net8.0-windows10.0.19041.0/publish/win-x64/**
+        if-no-files-found: error

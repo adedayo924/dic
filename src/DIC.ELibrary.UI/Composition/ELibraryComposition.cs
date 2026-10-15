@@ -33,6 +33,16 @@ public static class ELibraryComposition
             ContentRootPath = AppContext.BaseDirectory
         });
 
+        // Optional machine-wide settings let an administrator pin shared values (such as
+        // Library:DataDirectory) for every user on the machine. Precedence: command line > env
+        // vars > this file > appsettings.json.
+        var machineConfig = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+            "DIC",
+            "ELibrary",
+            "appsettings.json");
+        builder.Configuration.AddJsonFile(machineConfig, optional: true, reloadOnChange: false);
+
         var library = builder.Configuration.GetSection(LibraryOptions.SectionName).Get<LibraryOptions>() ?? new LibraryOptions();
         Directory.CreateDirectory(library.ResolvedDataDirectory);
         Directory.CreateDirectory(library.LogsPath);

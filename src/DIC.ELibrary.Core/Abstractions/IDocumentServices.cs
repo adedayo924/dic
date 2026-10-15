@@ -20,6 +20,22 @@ public interface IPdfService
 
     /// <summary>Extracts text from a single page (1-based page number).</summary>
     Task<string> ExtractPageTextAsync(string filePath, int pageNumber, CancellationToken cancellationToken = default);
+
+    /// <summary>Searches the document's embedded text for a term, returning one hit per matching page.</summary>
+    Task<IReadOnlyList<PdfTextMatch>> SearchAsync(string filePath, string term, int maxMatches = 200, CancellationToken cancellationToken = default);
+}
+
+/// <summary>A single page that contains at least one occurrence of a searched term.</summary>
+public class PdfTextMatch
+{
+    /// <summary>1-based page number.</summary>
+    public int PageNumber { get; init; }
+
+    /// <summary>Short excerpt of the page text surrounding the first occurrence.</summary>
+    public string Snippet { get; init; } = string.Empty;
+
+    /// <summary>Number of (non-overlapping) occurrences of the term on this page.</summary>
+    public int MatchCount { get; init; }
 }
 
 /// <summary>Renders PDF pages to images (Windows-only implementation).</summary>
