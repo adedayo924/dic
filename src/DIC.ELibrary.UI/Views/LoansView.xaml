@@ -21,6 +21,8 @@
                 <TextBlock VerticalAlignment="Center" Margin="0,0,10,0" Style="{StaticResource CaptionText}">
                     <Run Text="Overdue updated: " /><Run Text="{Binding OverdueRefreshed, Mode=OneWay}" />
                 </TextBlock>
+                <Button Style="{StaticResource GhostButton}" Margin="0,0,8,0" Content="Export CSV"
+                        Command="{Binding ExportCsvCommand}" />
                 <Button Style="{StaticResource GhostButton}" Content="Refresh overdue"
                         Command="{Binding RefreshOverdueCommand}" />
             </StackPanel>

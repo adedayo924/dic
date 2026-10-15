@@ -43,3 +43,15 @@ public interface IBackupService
     Task<OperationResult<string>> BackupAsync(string targetFile, CancellationToken cancellationToken = default);
     Task<OperationResult> RestoreAsync(string sourceFile, CancellationToken cancellationToken = default);
 }
+
+public interface IReportService
+{
+    /// <summary>Builds a CSV summary of library statistics (the Reports page).</summary>
+    Task<string> BuildStatisticsReportCsvAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>Builds a CSV of all circulation transactions (loans).</summary>
+    Task<string> BuildCirculationReportCsvAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>Builds a CSV of the full audit log.</summary>
+    Task<string> BuildAuditReportCsvAsync(CancellationToken cancellationToken = default);
+}

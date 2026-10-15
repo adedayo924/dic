@@ -16,8 +16,12 @@
 
         <Grid Grid.Row="0">
             <TextBlock Text="Audit log" Style="{StaticResource H1Text}" />
-            <Button HorizontalAlignment="Right" Style="{StaticResource GhostButton}" Content="Refresh"
-                    Command="{Binding RefreshCommand}" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Style="{StaticResource GhostButton}" Margin="0,0,8,0" Content="Export CSV"
+                        Command="{Binding ExportCsvCommand}" />
+                <Button Style="{StaticResource GhostButton}" Content="Refresh"
+                        Command="{Binding RefreshCommand}" />
+            </StackPanel>
         </Grid>
 
         <Grid Grid.Row="1" Margin="0,12,0,0">

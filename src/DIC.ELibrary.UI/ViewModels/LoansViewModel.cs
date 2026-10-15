@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DIC.ELibrary.Core.Abstractions;
@@ -15,11 +16,13 @@ public partial class LoansViewModel : ViewModelBase
 {
     private readonly ILoanService _loans;
     private readonly IDialogService _dialogs;
+    private readonly IReportService _reports;
 
-    public LoansViewModel(ILoanService loans, IDialogService dialogs)
+    public LoansViewModel(ILoanService loans, IDialogService dialogs, IReportService reports)
     {
         _loans = loans;
         _dialogs = dialogs;
+        _reports = reports;
         Title = "Loans";
         Filters = new ObservableCollection<LoanStatusFilter>
         {
@@ -116,5 +119,26 @@ public partial class LoansViewModel : ViewModelBase
         }
         TotalCount = result.TotalCount;
         TotalPages = Math.Max(1, result.TotalPages);
+    }
+
+    [RelayCommand]
+    private async Task ExportCsvAsync()
+    {
+        var file = _dialogs.SaveFile("CSV files (*.csv)|*.csv", "Export circulation report", "circulation-report.csv");
+        if (file is null)
+        {
+            return;
+        }
+
+        try
+        {
+            var csv = await _reports.BuildCirculationReportCsvAsync();
+            File.WriteAllText(file, csv);
+            _dialogs.ShowInfo($"Report saved to:{Environment.NewLine}{file}", "Export complete");
+        }
+        catch (Exception ex)
+        {
+            _dialogs.ShowError(ex.Message);
+        }
     }
 }

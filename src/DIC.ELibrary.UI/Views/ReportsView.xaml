@@ -11,8 +11,12 @@
         <StackPanel>
             <Grid>
                 <TextBlock Text="Reports" Style="{StaticResource H1Text}" />
-                <Button HorizontalAlignment="Right" Style="{StaticResource GhostButton}" Content="Refresh"
-                        Command="{Binding RefreshCommand}" />
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Style="{StaticResource GhostButton}" Margin="0,0,8,0" Content="Export CSV"
+                            Command="{Binding ExportCsvCommand}" />
+                    <Button Style="{StaticResource GhostButton}" Content="Refresh"
+                            Command="{Binding RefreshCommand}" />
+                </StackPanel>
             </Grid>
             <TextBlock Margin="0,2,0,20" Text="Library statistics and usage." Style="{StaticResource CaptionText}" />
 
