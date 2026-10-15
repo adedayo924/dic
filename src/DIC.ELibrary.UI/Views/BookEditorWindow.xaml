@@ -1,0 +1,106 @@
+<Window x:Class="DIC.ELibrary.UI.Views.BookEditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:DIC.ELibrary.UI.ViewModels"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=vm:BookEditorViewModel}"
+        Title="Book details"
+        Height="620" Width="560"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Background="{StaticResource BackgroundBrush}">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <TextBlock Text="{Binding Title, TargetNullValue='New book'}" Style="{StaticResource H2Text}" Margin="0,0,0,12" />
+
+                <TextBlock Text="Title *" Style="{StaticResource CaptionText}" />
+                <TextBox Style="{StaticResource InputTextBox}" Margin="0,4,0,10"
+                         Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" />
+
+                <TextBlock Text="Subtitle" Style="{StaticResource CaptionText}" />
+                <TextBox Style="{StaticResource InputTextBox}" Margin="0,4,0,10"
+                         Text="{Binding Subtitle, UpdateSourceTrigger=PropertyChanged}" />
+
+                <Grid Margin="0,0,0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="12" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Author" Style="{StaticResource CaptionText}" />
+                        <TextBox Style="{StaticResource InputTextBox}" Margin="0,4,0,0"
+                                 Text="{Binding Author, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="Publisher" Style="{StaticResource CaptionText}" />
+                        <TextBox Style="{StaticResource InputTextBox}" Margin="0,4,0,0"
+                                 Text="{Binding Publisher, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </Grid>
+
+                <Grid Margin="0,0,0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="12" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Year" Style="{StaticResource CaptionText}" />
+                        <TextBox Style="{StaticResource InputTextBox}" Margin="0,4,0,0"
+                                 Text="{Binding PublicationYear, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="Language" Style="{StaticResource CaptionText}" />
+                        <TextBox Style="{StaticResource InputTextBox}" Margin="0,4,0,0"
+                                 Text="{Binding Language, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </Grid>
+
+                <TextBlock Text="ISBN" Style="{StaticResource CaptionText}" />
+                <TextBox Style="{StaticResource InputTextBox}" Margin="0,4,0,10"
+                         Text="{Binding Isbn, UpdateSourceTrigger=PropertyChanged}" />
+
+                <Grid Margin="0,0,0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="12" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Category" Style="{StaticResource CaptionText}" />
+                        <ComboBox Style="{StaticResource InputComboBox}" Margin="0,4,0,0"
+                                  ItemsSource="{Binding Categories}" SelectedValue="{Binding CategoryId}"
+                                  SelectedValuePath="Id" DisplayMemberPath="Name" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="Status" Style="{StaticResource CaptionText}" />
+                        <ComboBox x:Name="StatusBox" Style="{StaticResource InputComboBox}" Margin="0,4,0,0"
+                                  SelectedItem="{Binding Status}" />
+                    </StackPanel>
+                </Grid>
+
+                <TextBlock Text="Description" Style="{StaticResource CaptionText}" />
+                <TextBox Style="{StaticResource InputTextBox}" Margin="0,4,0,0" Height="120"
+                         AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
+                         Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+        </ScrollViewer>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+            <Button Style="{StaticResource GhostButton}" Margin="0,0,10,0" Content="Cancel"
+                    IsCancel="True" />
+            <Button Style="{StaticResource PrimaryButton}" Content="Save" IsDefault="True"
+                    Click="OnSave" />
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,66 @@
+<UserControl x:Class="DIC.ELibrary.UI.Views.CategoriesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:DIC.ELibrary.UI.ViewModels"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:CategoriesViewModel}">
+
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <StackPanel>
+                <TextBlock Text="Categories" Style="{StaticResource H1Text}" />
+                <TextBlock Margin="0,2,0,0" Text="Organise the library by creating book categories."
+                           Style="{StaticResource CaptionText}" />
+            </StackPanel>
+            <Button HorizontalAlignment="Right" VerticalAlignment="Top" Style="{StaticResource PrimaryButton}"
+                    Content="+ New category" Command="{Binding NewCommand}" />
+        </Grid>
+
+        <Border Grid.Row="1" Style="{StaticResource Card}" Margin="0,12,0,12">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0" MinWidth="200" Style="{StaticResource InputTextBox}"
+                         ToolTip="Filter by name or description"
+                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+                <Button Grid.Column="1" Margin="10,0,0,0" Style="{StaticResource GhostButton}" Content="Refresh"
+                        Command="{Binding RefreshCommand}" />
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="2">
+            <DataGrid Style="{StaticResource DataGridStyle}" ItemsSource="{Binding Results}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" MinWidth="180" />
+                    <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="2*" MinWidth="220" />
+                    <DataGridTemplateColumn Header="" Width="180">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Style="{StaticResource GhostButton}" Margin="0,0,6,0" Content="Edit"
+                                            Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}" />
+                                    <Button Style="{StaticResource DangerButton}" Content="Delete"
+                                            Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <TextBlock Text="No categories yet. Create one to get started." Style="{StaticResource EmptyState}"
+                       Visibility="{Binding Results, Converter={StaticResource NullToVisibility}, ConverterParameter=invert}" />
+        </Grid>
+    </Grid>
+</UserControl>

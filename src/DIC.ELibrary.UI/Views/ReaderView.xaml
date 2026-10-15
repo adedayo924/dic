@@ -1,0 +1,109 @@
+<UserControl x:Class="DIC.ELibrary.UI.Views.ReaderView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:DIC.ELibrary.UI.ViewModels"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:ReaderViewModel}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Toolbar -->
+        <Border Grid.Row="0" Grid.ColumnSpan="2" Background="{StaticResource SurfaceBrush}"
+                BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,0,1" Padding="12">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="0" Style="{StaticResource GhostButton}" Content="← Back"
+                        Command="{Binding BackCommand}" />
+
+                <TextBlock Grid.Column="1" Margin="16,0" VerticalAlignment="Center"
+                           FontWeight="SemiBold" TextTrimming="CharacterEllipsis"
+                           Text="{Binding Book.Title}" Style="{StaticResource BodyText}" />
+
+                <WrapPanel Grid.Column="2" Orientation="Horizontal" MaxWidth="460">
+                    <Button Style="{StaticResource GhostButton}" Margin="0,0,6,0" Content="−" Command="{Binding ZoomOutCommand}" />
+                    <TextBlock VerticalAlignment="Center" MinWidth="52" TextAlignment="Center" Style="{StaticResource CaptionText}">
+                        <Run Text="{Binding ZoomPercent, Mode=OneWay}" /><Run Text="%" />
+                    </TextBlock>
+                    <Button Style="{StaticResource GhostButton}" Margin="6,0,12,0" Content="+" Command="{Binding ZoomInCommand}" />
+                    <Button Style="{StaticResource GhostButton}" Margin="0,0,6,0" Content="♡" Command="{Binding ToggleFavoriteCommand}" />
+                    <Button Style="{StaticResource SecondaryButton}" Margin="0,0,6,0" Content="Bookmark" Command="{Binding AddBookmarkCommand}" />
+                    <Button Style="{StaticResource GhostButton}" Content="{Binding BookmarksToggleLabel}"
+                            Command="{Binding ToggleBookmarksCommand}" />
+                </WrapPanel>
+            </Grid>
+        </Border>
+
+        <!-- Page -->
+        <Grid Grid.Row="1" Grid.Column="0" Background="{StaticResource BackgroundBrush}">
+            <ScrollViewer x:Name="PageScrollViewer" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Padding="16">
+                <Image Source="{Binding PageImage}" Stretch="Uniform" Width="{Binding PageDisplayWidth}"
+                       HorizontalAlignment="Center" />
+            </ScrollViewer>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,14">
+                <Border Background="{StaticResource SurfaceBrush}" CornerRadius="20" Padding="8,4"
+                        BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+                    <StackPanel Orientation="Horizontal">
+                        <Button Style="{StaticResource GhostButton}" Content="←" Command="{Binding PreviousPageCommand}" />
+                        <TextBlock Margin="14,0" VerticalAlignment="Center" Style="{StaticResource BodyText}">
+                            <Run Text="{Binding CurrentPage, Mode=OneWay}" /><Run Text=" / " /><Run Text="{Binding PageCount, Mode=OneWay}" />
+                        </TextBlock>
+                        <Button Style="{StaticResource GhostButton}" Content="→" Command="{Binding NextPageCommand}" />
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Grid>
+
+        <!-- Bookmarks panel -->
+        <Border Grid.Row="1" Grid.Column="1" Width="260" Background="{StaticResource SurfaceBrush}"
+                Visibility="{Binding AreBookmarksVisible, Converter={StaticResource BoolToVisibility}}"
+                BorderBrush="{StaticResource BorderBrush}" BorderThickness="1,0,0,0">
+            <DockPanel Margin="12">
+                <TextBlock DockPanel.Dock="Top" Text="Bookmarks" Style="{StaticResource H2Text}" Margin="0,4,0,8" />
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,10">
+                    <TextBox Width="140" Style="{StaticResource InputTextBox}"
+                             Text="{Binding BookmarkLabel, UpdateSourceTrigger=PropertyChanged}"
+                             ToolTip="Optional label" />
+                    <Button Margin="6,0,0,0" Style="{StaticResource GhostButton}" Content="Add"
+                            Command="{Binding AddBookmarkCommand}" />
+                </StackPanel>
+                <ListBox BorderThickness="0" Background="Transparent" ItemsSource="{Binding Bookmarks}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,4">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Style="{StaticResource BodyText}">
+                                        <Run Text="Page " /><Run Text="{Binding Page, Mode=OneWay}" />
+                                    </TextBlock>
+                                    <TextBlock Text="{Binding Label}" Style="{StaticResource CaptionText}" />
+                                </StackPanel>
+                                <Button Grid.Column="1" Style="{StaticResource GhostButton}" Content="✕"
+                                        Command="{Binding DataContext.RemoveBookmarkCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel>
+        </Border>
+    </Grid>
+</UserControl>

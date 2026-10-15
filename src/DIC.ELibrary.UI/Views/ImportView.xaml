@@ -1,0 +1,63 @@
+<UserControl x:Class="DIC.ELibrary.UI.Views.ImportView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:DIC.ELibrary.UI.ViewModels"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:ImportViewModel}">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0">
+            <TextBlock Text="Import a book" Style="{StaticResource H1Text}" />
+            <TextBlock Margin="0,2,0,16" Text="Open a signed .dicpkg package to add it to the library."
+                       Style="{StaticResource CaptionText}" />
+            <StackPanel Orientation="Horizontal">
+                <Button Style="{StaticResource PrimaryButton}" Content="Choose package…" Command="{Binding BrowseCommand}" />
+                <TextBlock Margin="12,0" VerticalAlignment="Center" Text="{Binding FileName}" Style="{StaticResource BodyText}" />
+            </StackPanel>
+            <TextBlock Margin="0,10,0,0" Text="{Binding StatusMessage}" Style="{StaticResource BodyText}"
+                       Foreground="{StaticResource RedBrush}" />
+        </StackPanel>
+
+        <Border Grid.Row="1" Style="{StaticResource Card}" Margin="0,16,0,0" VerticalAlignment="Top"
+                Visibility="{Binding Manifest, Converter={StaticResource NullToVisibility}}">
+            <StackPanel>
+                <TextBlock Text="{Binding Manifest.Title}" Style="{StaticResource H2Text}" />
+                <TextBlock Text="{Binding Manifest.Subtitle}" Style="{StaticResource CaptionText}"
+                           Visibility="{Binding Manifest.Subtitle, Converter={StaticResource NullToVisibility}}" />
+                <Grid Margin="0,12,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Author:" FontWeight="SemiBold" Margin="0,2,12,2" />
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Manifest.Author}" Margin="0,2" />
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Category:" FontWeight="SemiBold" Margin="0,2,12,2" />
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Manifest.Category}" Margin="0,2" />
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Pages:" FontWeight="SemiBold" Margin="0,2,12,2" />
+                    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Manifest.PageCount}" Margin="0,2" />
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Size:" FontWeight="SemiBold" Margin="0,2,12,2" />
+                    <TextBlock Grid.Row="3" Grid.Column="1"
+                               Text="{Binding Manifest.ContentSizeBytes, Converter={StaticResource ByteSize}}" Margin="0,2" />
+                </Grid>
+                <Button Margin="0,18,0,0" HorizontalAlignment="Left" Style="{StaticResource PrimaryButton}"
+                        Content="Import into library" Command="{Binding InstallCommand}"
+                        IsEnabled="{Binding IsVerified}" />
+            </StackPanel>
+        </Border>
+    </Grid>
+    </ScrollViewer>
+</UserControl>

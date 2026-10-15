@@ -1,0 +1,65 @@
+<UserControl x:Class="DIC.ELibrary.UI.Views.AdminDashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:DIC.ELibrary.UI.ViewModels"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:AdminDashboardViewModel}">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="24">
+        <StackPanel>
+            <Grid>
+                <TextBlock Text="Administrator dashboard" Style="{StaticResource H1Text}" />
+                <Button HorizontalAlignment="Right" Style="{StaticResource GhostButton}" Content="Refresh"
+                        Command="{Binding RefreshCommand}" />
+            </Grid>
+            <TextBlock Margin="0,2,0,20" Text="Overview of library activity and content."
+                       Style="{StaticResource CaptionText}" />
+
+            <UniformGrid Columns="4" Margin="0,0,0,24">
+                <Border Style="{StaticResource Card}" Margin="0,0,8,0">
+                    <StackPanel>
+                        <TextBlock Text="{Binding Stats.TotalBooks}" FontSize="28" FontWeight="Bold"
+                                   Foreground="{StaticResource IndigoBrush}" />
+                        <TextBlock Text="Total books" Style="{StaticResource CaptionText}" />
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource Card}" Margin="4,0,8,0">
+                    <StackPanel>
+                        <TextBlock Text="{Binding Stats.TotalUsers}" FontSize="28" FontWeight="Bold"
+                                   Foreground="{StaticResource IndigoBrush}" />
+                        <TextBlock Text="Users" Style="{StaticResource CaptionText}" />
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource Card}" Margin="4,0,8,0">
+                    <StackPanel>
+                        <TextBlock Text="{Binding Stats.ActiveLoans}" FontSize="28" FontWeight="Bold"
+                                   Foreground="{StaticResource IndigoBrush}" />
+                        <TextBlock Text="Active loans" Style="{StaticResource CaptionText}" />
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource Card}" Margin="4,0,0,0">
+                    <StackPanel>
+                        <TextBlock Text="{Binding Stats.OverdueLoans}" FontSize="28" FontWeight="Bold"
+                                   Foreground="{StaticResource RedBrush}" />
+                        <TextBlock Text="Overdue" Style="{StaticResource CaptionText}" />
+                    </StackPanel>
+                </Border>
+            </UniformGrid>
+
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <TextBlock Text="Books by category" Style="{StaticResource H2Text}" Margin="0,0,0,10" />
+                    <DataGrid Style="{StaticResource DataGridStyle}" MaxHeight="360"
+                              ItemsSource="{Binding BooksByCategory}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Category" Binding="{Binding Category}" Width="*" />
+                            <DataGridTextColumn Header="Books" Binding="{Binding Count}" Width="120" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

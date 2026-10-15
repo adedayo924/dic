@@ -1,0 +1,85 @@
+<UserControl x:Class="DIC.ELibrary.UI.Views.ReportsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:DIC.ELibrary.UI.ViewModels"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:ReportsViewModel}">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="24">
+        <StackPanel>
+            <Grid>
+                <TextBlock Text="Reports" Style="{StaticResource H1Text}" />
+                <Button HorizontalAlignment="Right" Style="{StaticResource GhostButton}" Content="Refresh"
+                        Command="{Binding RefreshCommand}" />
+            </Grid>
+            <TextBlock Margin="0,2,0,20" Text="Library statistics and usage." Style="{StaticResource CaptionText}" />
+
+            <UniformGrid Columns="4" Margin="0,0,0,20">
+                <Border Style="{StaticResource Card}" Margin="0,0,8,0">
+                    <StackPanel>
+                        <TextBlock Text="{Binding Stats.PublishedBooks}" FontSize="26" FontWeight="Bold"
+                                   Foreground="{StaticResource IndigoBrush}" />
+                        <TextBlock Text="Published" Style="{StaticResource CaptionText}" />
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource Card}" Margin="4,0,8,0">
+                    <StackPanel>
+                        <TextBlock Text="{Binding Stats.DraftBooks}" FontSize="26" FontWeight="Bold"
+                                   Foreground="{StaticResource IndigoBrush}" />
+                        <TextBlock Text="Draft" Style="{StaticResource CaptionText}" />
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource Card}" Margin="4,0,8,0">
+                    <StackPanel>
+                        <TextBlock Text="{Binding Stats.TotalStorageBytes, Converter={StaticResource ByteSize}}"
+                                   FontSize="26" FontWeight="Bold" Foreground="{StaticResource IndigoBrush}" />
+                        <TextBlock Text="Storage" Style="{StaticResource CaptionText}" />
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource Card}" Margin="4,0,0,0">
+                    <StackPanel>
+                        <TextBlock Text="{Binding Stats.TotalCategories}" FontSize="26" FontWeight="Bold"
+                                   Foreground="{StaticResource IndigoBrush}" />
+                        <TextBlock Text="Categories" Style="{StaticResource CaptionText}" />
+                    </StackPanel>
+                </Border>
+            </UniformGrid>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="16" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Style="{StaticResource Card}">
+                    <StackPanel>
+                        <TextBlock Text="Books by category" Style="{StaticResource H2Text}" Margin="0,0,0,10" />
+                        <DataGrid Style="{StaticResource DataGridStyle}" MaxHeight="300"
+                                  ItemsSource="{Binding BooksByCategory}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Category" Binding="{Binding Category}" Width="*" />
+                                <DataGridTextColumn Header="Count" Binding="{Binding Count}" Width="90" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="2" Style="{StaticResource Card}">
+                    <StackPanel>
+                        <TextBlock Text="Most borrowed" Style="{StaticResource H2Text}" Margin="0,0,0,10" />
+                        <DataGrid Style="{StaticResource DataGridStyle}" MaxHeight="300"
+                                  ItemsSource="{Binding MostRead}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*" />
+                                <DataGridTextColumn Header="Loans" Binding="{Binding LoanCount}" Width="90" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

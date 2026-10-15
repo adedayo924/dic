@@ -1,0 +1,17 @@
+﻿<Application x:Class="DIC.ELibrary.Admin.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             ShutdownMode="OnExplicitShutdown">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/DIC.ELibrary.UI;component/Themes/Palette.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/DIC.ELibrary.UI;component/Themes/Theme.Light.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/DIC.ELibrary.UI;component/Themes/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/DIC.ELibrary.UI;component/Themes/Converters.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/DIC.ELibrary.UI;component/Themes/ViewTemplates.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/DIC.ELibrary.UI;component/Themes/AdminTemplates.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

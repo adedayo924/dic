@@ -1,0 +1,136 @@
+<Window x:Class="DIC.ELibrary.UI.Views.WelcomeWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:DIC.ELibrary.UI.ViewModels"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=vm:WelcomeViewModel}"
+        Title="{Binding Shell.ProductName}"
+        Height="560" Width="1080"
+        MinHeight="520" MinWidth="920"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanResize"
+        Background="{StaticResource BackgroundBrush}">
+
+    <Window.Resources>
+        <Style x:Key="RoleCard" TargetType="Button">
+            <Setter Property="Background" Value="{DynamicResource SurfaceBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Padding" Value="18" />
+            <Setter Property="Margin" Value="8" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="FocusVisualStyle" Value="{StaticResource KeyboardFocusVisual}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10" Padding="{TemplateBinding Padding}"
+                                SnapsToDevicePixels="True">
+                            <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource IndigoBrush}" />
+                                <Setter TargetName="border" Property="BorderThickness" Value="2" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Opacity" Value="0.85" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="{StaticResource IndigoBrush}" Padding="32,28">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Border Width="38" Height="38" CornerRadius="9" Background="White" Padding="3">
+                        <Image Source="{StaticResource AppLogo}" Stretch="Uniform" />
+                    </Border>
+                    <TextBlock Margin="14,0,0,0" VerticalAlignment="Center"
+                               FontSize="22" FontWeight="SemiBold" Foreground="White"
+                               Text="{Binding Shell.ProductName}" />
+                </StackPanel>
+                <TextBlock Margin="0,8,0,0" FontSize="12.5" Foreground="#D7DBF5"
+                           Text="{Binding Shell.Subtitle}" TextWrapping="Wrap" />
+            </StackPanel>
+        </Border>
+
+        <!-- Role picker -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="32,26">
+                <Image Source="{StaticResource AppLogo}" Height="96" Stretch="Uniform"
+                       HorizontalAlignment="Center" Margin="0,0,0,18" />
+                <TextBlock Text="Who are you signing in as?" Style="{StaticResource H1Text}" HorizontalAlignment="Center" />
+                <TextBlock Margin="0,6,0,18" Style="{StaticResource CaptionText}" HorizontalAlignment="Center"
+                           Text="Choose your role to open the correct sign-in screen." />
+
+                <UniformGrid Columns="4">
+                    <Button Style="{StaticResource RoleCard}" Click="OnStudent">
+                        <StackPanel>
+                            <TextBlock Text="🎓" FontSize="40" HorizontalAlignment="Center" />
+                            <TextBlock Text="Student" Style="{StaticResource H2Text}"
+                                       HorizontalAlignment="Center" Margin="0,10,0,0" />
+                            <TextBlock Margin="0,6,0,0" TextAlignment="Center" Style="{StaticResource CaptionText}"
+                                       Text="Browse the catalog, borrow and read books." />
+                        </StackPanel>
+                    </Button>
+
+                    <Button Style="{StaticResource RoleCard}" Click="OnTeacher">
+                        <StackPanel>
+                            <TextBlock Text="🧑‍🏫" FontSize="40" HorizontalAlignment="Center" />
+                            <TextBlock Text="Teacher" Style="{StaticResource H2Text}"
+                                       HorizontalAlignment="Center" Margin="0,10,0,0" />
+                            <TextBlock Margin="0,6,0,0" TextAlignment="Center" Style="{StaticResource CaptionText}"
+                                       Text="Browse the catalog, borrow and read books, with student access." />
+                        </StackPanel>
+                    </Button>
+
+                    <Button Style="{StaticResource RoleCard}" Click="OnLibrarian">
+                        <StackPanel>
+                            <TextBlock Text="🗂" FontSize="40" HorizontalAlignment="Center" />
+                            <TextBlock Text="Librarian" Style="{StaticResource H2Text}"
+                                       HorizontalAlignment="Center" Margin="0,10,0,0" />
+                            <TextBlock Margin="0,6,0,0" TextAlignment="Center" Style="{StaticResource CaptionText}"
+                                       Text="Manage the collection, loans and catalog." />
+                        </StackPanel>
+                    </Button>
+
+                    <Button Style="{StaticResource RoleCard}" Click="OnAdministrator">
+                        <StackPanel>
+                            <TextBlock Text="🛡" FontSize="40" HorizontalAlignment="Center" />
+                            <TextBlock Text="Administrator" Style="{StaticResource H2Text}"
+                                       HorizontalAlignment="Center" Margin="0,10,0,0" />
+                            <TextBlock Margin="0,6,0,0" TextAlignment="Center" Style="{StaticResource CaptionText}"
+                                       Text="Full access including users, reports and settings." />
+                        </StackPanel>
+                    </Button>
+                </UniformGrid>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Footer -->
+        <Border Grid.Row="2" Background="{DynamicResource SurfaceAltBrush}" Padding="32,12"
+                BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,1,0,0">
+            <TextBlock Style="{StaticResource CaptionText}"
+                       Text="Accounts are created by an administrator. If you don't have one yet, ask a librarian." />
+        </Border>
+    </Grid>
+</Window>

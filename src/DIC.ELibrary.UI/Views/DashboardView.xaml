@@ -1,0 +1,98 @@
+<UserControl x:Class="DIC.ELibrary.UI.Views.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:DIC.ELibrary.UI.ViewModels"
+             xmlns:models="clr-namespace:DIC.ELibrary.Core.Models;assembly=DIC.ELibrary.Core"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:DashboardViewModel}">
+
+    <UserControl.Resources>
+        <DataTemplate x:Key="BookCard" DataType="{x:Type models:BookSummary}">
+            <Button Background="Transparent" BorderThickness="0" Padding="0" Cursor="Hand"
+                    HorizontalContentAlignment="Stretch"
+                    Command="{Binding DataContext.OpenCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                    CommandParameter="{Binding}">
+                <Border Style="{StaticResource Card}" Width="150" Padding="10" Margin="0,0,10,0">
+                    <StackPanel>
+                        <Border Height="150" CornerRadius="4" Background="{StaticResource BackgroundBrush}">
+                            <Grid>
+                                <TextBlock Text="📘" FontSize="42" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                           Foreground="{StaticResource TextDisabledBrush}" />
+                                <Image Stretch="UniformToFill" Source="{Binding CoverPath, Converter={StaticResource PathToImage}}" />
+                            </Grid>
+                        </Border>
+                        <TextBlock Margin="0,8,0,0" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"
+                                   Text="{Binding Title}" Style="{StaticResource BodyText}" />
+                        <TextBlock Text="{Binding Author}" Style="{StaticResource CaptionText}"
+                                   TextTrimming="CharacterEllipsis" />
+                    </StackPanel>
+                </Border>
+            </Button>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="24">
+        <StackPanel>
+            <TextBlock Text="{Binding Greeting}" Style="{StaticResource H1Text}" />
+            <TextBlock Margin="0,2,0,20" Text="Here is what is happening in your library."
+                       Style="{StaticResource CaptionText}" />
+
+            <UniformGrid Columns="4" Margin="0,0,0,24">
+                <Border Style="{StaticResource Card}" Margin="0,0,8,0">
+                    <StackPanel>
+                        <TextBlock Text="{Binding Stats.TotalBooks}" FontSize="28" FontWeight="Bold"
+                                   Foreground="{StaticResource IndigoBrush}" />
+                        <TextBlock Text="Books" Style="{StaticResource CaptionText}" />
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource Card}" Margin="4,0,8,0">
+                    <StackPanel>
+                        <TextBlock Text="{Binding Stats.TotalCategories}" FontSize="28" FontWeight="Bold"
+                                   Foreground="{StaticResource IndigoBrush}" />
+                        <TextBlock Text="Categories" Style="{StaticResource CaptionText}" />
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource Card}" Margin="4,0,8,0">
+                    <StackPanel>
+                        <TextBlock Text="{Binding Stats.PublishedBooks}" FontSize="28" FontWeight="Bold"
+                                   Foreground="{StaticResource IndigoBrush}" />
+                        <TextBlock Text="Available" Style="{StaticResource CaptionText}" />
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource Card}" Margin="4,0,0,0">
+                    <StackPanel>
+                        <TextBlock Text="{Binding Stats.TotalStorageBytes, Converter={StaticResource ByteSize}}"
+                                   FontSize="28" FontWeight="Bold" Foreground="{StaticResource IndigoBrush}" />
+                        <TextBlock Text="Stored" Style="{StaticResource CaptionText}" />
+                    </StackPanel>
+                </Border>
+            </UniformGrid>
+
+            <TextBlock Text="Continue reading" Style="{StaticResource H2Text}" />
+            <TextBlock Text="No reading history yet." Style="{StaticResource CaptionText}"
+                       Visibility="{Binding ContinueReading.Count, Converter={StaticResource NullToVisibility}, ConverterParameter=invert}" />
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" Margin="0,12,0,8">
+                <ItemsControl ItemsSource="{Binding ContinueReading}" ItemTemplate="{StaticResource BookCard}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+
+            <TextBlock Margin="0,12,0,0" Text="Recently added" Style="{StaticResource H2Text}" />
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" Margin="0,12,0,8">
+                <ItemsControl ItemsSource="{Binding Recent}" ItemTemplate="{StaticResource BookCard}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
